@@ -16,4 +16,10 @@ public interface EmployeeService {
 
 	List<Employee> getEmployeeName(String employeeName) throws Exception;
 
+	String update(Employee employee) throws Exception;
+
+	String updateEmployeeName(Integer employeeId, String employeeName) throws Exception;
+
+	String deleteEmployee(Integer employeeId) throws Exception;
+
 }

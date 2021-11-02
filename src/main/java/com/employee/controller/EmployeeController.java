@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,6 +61,25 @@ public class EmployeeController {
 	public ResponseEntity<List<Employee>> getEmployeeByName(@PathVariable("employeeName") String employeeName)
 			throws Exception {
 		List<Employee> response = employeeService.getEmployeeName(employeeName);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<String> updateEmployee(@RequestBody Employee employee) throws Exception {
+		String response = employeeService.update(employee);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@PutMapping("/update/details/{employeeId}/{employeeName}")
+	public ResponseEntity<String> updateEmployeeName(@PathVariable("employeeId") Integer employeeId,
+			@PathVariable("employeeName") String employeeName) throws Exception {
+		String response = employeeService.updateEmployeeName(employeeId,employeeName);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	@DeleteMapping("/delete/{employeeId}")
+	public ResponseEntity<String> deleteEmployeeById(@PathVariable("employeeId") Integer employeeId) throws Exception {
+		String response = employeeService.deleteEmployee(employeeId);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
