@@ -2,13 +2,14 @@ package com.employee.service;
 
 import java.util.List;
 
+import com.employee.exception.EmployeeNoContentException;
 import com.employee.model.Employee;
 
 public interface EmployeeService {
 
 	String create(Employee employee);
 
-	List<Employee> getAllEmployees() throws Exception;
+	List<Employee> getAllEmployees() throws EmployeeNoContentException;
 
 	Employee getEmployee(Integer employeeId) throws Exception;
 

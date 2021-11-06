@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.employee.exception.EmployeeNoContentException;
+import com.employee.exception.EmployeeNotFoundException;
 import com.employee.model.Employee;
 import com.employee.repository.EmployeeRepository;
 
@@ -21,6 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public String create(Employee employee) {
+		employee.getEmployeeAddress().setEmployee(employee);
 		Employee employeeResponse = employeeRepository.save(employee);
 		if (employeeResponse == null) {
 			return "Data not saved properly";
@@ -29,46 +32,46 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> getAllEmployees() throws Exception {
+	public List<Employee> getAllEmployees() throws EmployeeNoContentException {
 		List<Employee> response = employeeRepository.findAll();
 		if (null == response || response.isEmpty()) {
-			throw new Exception("Data is empty");
+			throw new EmployeeNoContentException("Data is empty");
 		}
 		return response;
 	}
 
 	@Override
-	public Employee getEmployee(Integer employeeId) throws Exception {
+	public Employee getEmployee(Integer employeeId) throws EmployeeNotFoundException {
 		Optional<Employee> employeeResponse = employeeRepository.findById(employeeId);
 		if (!employeeResponse.isPresent()) {
-			throw new Exception("Data is not found");
+			throw new EmployeeNotFoundException("Data is not found");
 		}
 		return employeeResponse.get();
 	}
 
 	@Override
-	public Employee getEmployeeLoginDetails(String loginId, String password) throws Exception {
+	public Employee getEmployeeLoginDetails(String loginId, String password) throws EmployeeNotFoundException {
 		Optional<Employee> employeeResponse = employeeRepository.findByLoginIdAndPassword(loginId, password);
 		if (!employeeResponse.isPresent()) {
-			throw new Exception("Data is Incorrect");
+			throw new EmployeeNotFoundException("Data is Incorrect");
 		}
 		return employeeResponse.get();
 	}
 
 	@Override
-	public List<Employee> getEmployeeName(String employeeName) throws Exception {
+	public List<Employee> getEmployeeName(String employeeName) throws EmployeeNotFoundException {
 		List<Employee> response = employeeRepository.getEmployeeByName(employeeName);
 		if (null == response || response.isEmpty()) {
-			throw new Exception("Data is not found");
+			throw new EmployeeNotFoundException("Data is not found");
 		}
 		return response;
 	}
 
 	@Override
-	public String update(Employee employee) throws Exception {
+	public String update(Employee employee) throws EmployeeNotFoundException {
 		Optional<Employee> response = employeeRepository.findById(employee.getEmployeeId());
 		if (!response.isPresent()) {
-			throw new Exception("Data is not found");
+			throw new EmployeeNotFoundException("Data is not found");
 		}
 
 		if (employee.getEmployeeName() != null) {
@@ -97,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (!response.isPresent()) {
 			throw new Exception("Data is not found");
 		}
-		 employeeRepository.updateEmployee(employeeId, employeeName);
+		employeeRepository.updateEmployee(employeeId, employeeName);
 		return "updated succesffuly";
 	}
 
