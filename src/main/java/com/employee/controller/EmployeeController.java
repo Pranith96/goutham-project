@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employee.model.Employee;
 import com.employee.service.EmployeeService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -27,6 +29,9 @@ public class EmployeeController {
 	EmployeeService employeeService;
 
 	@PostMapping("/add")
+	 @ApiOperation(value = "Employee account Creation API",
+     notes = "Please provide all the info for Employee creation",
+     response = Employee.class)
 	public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
 		String response = employeeService.create(employee);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
